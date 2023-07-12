@@ -8,16 +8,16 @@ library(DHARMa)
 ### The dataset in this study named sh_sum
 
 # Univariable GAMs --------------------------------------------------------
-model=gam(posi~pm25*ah+ns(week,6)+ns(time,8)+offset (log(cases)),
-          family = poisson(), sh_sum)
+model=gam(posi~pm25*ah+ns(week,6)+ns(time,8)+offset(log(cases)),
+          family = poisson(link = 'log'), sh_sum)
 summary(model)
 simulateResiduals(model)
 AIC(model)
-sum(residuals(model, type = "pearson")^2) / df.residual(model) # dispersion parameter, compare with 1
+sum(residuals(model, type = "pearson")^2) / df.residual(model) # dispersion parameter
 
 # Univariable DLNM --------------------------------------------------------
 cb.pm25 =crossbasis(sh_sum$pm25, lag = 5, 
-                    argvar = list(fun="ns", 4,knots=c()), arglag = list(fun='ns',6) )
+                    argvar = list(fun="ns", 3, knots=c(50,100,150)), arglag = list(fun='ns',6, knots=c(2)))
 
 model=gam(posi ~ cb.pm25+ns(time,8)+ns(week,6)+offset(log(case)), 
           family = poisson(link = 'log'), df)
