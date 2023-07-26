@@ -1,12 +1,13 @@
 library(dlnm)
 library(mgcv)
+library(gam)
 library(ggplot2)
 
 
 data("chicagoNMMAPS")
 cbCHIpm =crossbasis(chicagoNMMAPS$temp, lag = 5, argvar = list(fun="ns", 3), 
                     arglag = list(fun='ns',6))
-CHIglm=glm(death~cbCHIpm:o3,family = quasipoisson(), data = chicagoNMMAPS)
+CHIglm=gam(death~cbCHIpm:o3,family = quasipoisson(), data = chicagoNMMAPS)
 CHIpre=crosspred(cbCHIpm,CHIglm)
 plot(CHIpre,ticktype='detailed',xlab="\n\n PM 2.5",ylab="\n\n Lag (weeks)", zlab="\n\n RR",
      border='#3366FF',
