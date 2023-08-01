@@ -1,6 +1,5 @@
 library(dlnm)
 library(mgcv)
-library(gam)
 library(ggplot2)
 
 
